@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "3032:3000"
+    volumes:
+      - .:/code
+      - logvolume01:/var/log
+volumes:
+  logvolume01: {}
