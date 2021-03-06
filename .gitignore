@@ -18,4 +18,6 @@
 ### Go Patch ###
 /vendor/
 /Godeps/
+
 go.sum
+.vscode/
