@@ -2,24 +2,26 @@ package main
 
 import (
 	"os"
+	"service/generator"
 
 	"github.com/gogearbox/gearbox"
 )
 
 func main() {
 	// Get the value of an Environment Variable
-	port := getEnvDefault("PORT", "3001")
+	port := getEnvDefault("PORT", "3000")
 
-	// Setup gearbox
-	g := gearbox.New()
+	// Setup
+	gr := gearbox.New()
+	g := generator.New()
 
-	// Define your handlers
-	g.Get("/", func(ctx gearbox.Context) {
-		ctx.SendString("Hello World!")
+	// Handlers
+	gr.Get("/", func(ctx gearbox.Context) {
+		ctx.SendString(g.Generate())
 	})
 
 	// Start service
-	g.Start(":" + port)
+	gr.Start(":" + port)
 }
 
 // GetEnvDefault set the environmental variable by default
