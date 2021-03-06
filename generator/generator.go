@@ -41,21 +41,20 @@ func New() Generator {
 
 // Generate a random phrase
 func (g *generator) Generate() string {
-	phrase := getLine(g.Dictionary1, rand.Int()%g.Dictionary1Lenght)
+	phrase := getLine(
+		g.Dictionary1,
+		rand.Int()%g.Dictionary1Lenght)
 
 	var result string
-	var buffer string
 
-	for i := 0; i < len(phrase); i++ {
-		buffer = string([]rune(phrase)[i])
-
-		if buffer == "-" {
-			if string([]rune(phrase)[i+1]) == "-" {
-				buffer = getLine(g.Dictionary2, rand.Int()%g.Dictionary2Lenght)
-				i++
-			}
+	for _, r := range phrase {
+		if string(r) == "-" {
+			result += getLine(
+				g.Dictionary2,
+				rand.Int()%g.Dictionary2Lenght)
+		} else {
+			result += string(r)
 		}
-		result += buffer
 	}
 
 	return result
@@ -67,8 +66,10 @@ func linesInFile(fileName string) int {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer f.Close()
 
 	scanner := bufio.NewScanner(f)
+	f.Seek(0, os.SEEK_SET)
 	var count int = 0
 
 	for scanner.Scan() {
@@ -76,24 +77,25 @@ func linesInFile(fileName string) int {
 		count++
 	}
 
-	defer f.Close()
 	return count
 }
 
 // getLine get the line in the n position
 func getLine(fileName string, n int) string {
+	var result string
+
 	f, err := os.Open(fileName)
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer f.Close()
 
 	scanner := bufio.NewScanner(f)
-	var line string
+	f.Seek(0, os.SEEK_SET)
 
-	for i := 0; i < n; i++ {
-		line = scanner.Text()
+	for i := 0; i < n && scanner.Scan(); i++ {
+		result = scanner.Text()
 	}
 
-	defer f.Close()
-	return line
+	return result
 }
