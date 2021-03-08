@@ -7,21 +7,31 @@ import (
 	"github.com/gogearbox/gearbox"
 )
 
+// Response struct for json response
+type Response struct {
+	Value string
+}
+
 func main() {
 	// Get the value of an Environment Variable
 	port := getEnvDefault("PORT", "3000")
 
 	// Setup
-	gr := gearbox.New()
+	gb := gearbox.New()
 	g := generator.New()
 
 	// Handlers
-	gr.Get("/", func(ctx gearbox.Context) {
+	gb.Get("/", func(ctx gearbox.Context) {
 		ctx.SendString(g.Generate())
+	})
+	gb.Get("/json", func(ctx gearbox.Context) {
+		var r Response
+		r.Value = g.Generate()
+		ctx.SendJSON(&r)
 	})
 
 	// Start service
-	gr.Start(":" + port)
+	gb.Start(":" + port)
 }
 
 // GetEnvDefault set the environmental variable by default
