@@ -27,6 +27,8 @@ func main() {
 	gb.Get("/json", func(ctx gearbox.Context) {
 		var r Response
 		r.Value = g.Generate()
+
+		ctx.Set("Access-Control-Allow-Origin", "*")
 		ctx.SendJSON(&r)
 	})
 
