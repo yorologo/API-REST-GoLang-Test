@@ -2,9 +2,9 @@ package main
 
 import (
 	"os"
-	"service/generator"
 
 	"github.com/gogearbox/gearbox"
+	"github.com/yorologo/go-generator-phrases"
 )
 
 // Response struct for json response
